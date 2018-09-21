@@ -74,12 +74,12 @@ function create() {
 
 
     //The BADDIE and its settings
-    baddie = game.add.sprite(32, game.world.height - 150, 'baddie');
+    baddie = game.add.sprite(80, game.world.height - 96, 'baddie');
     baddie.scale.set(1, 1);
     game.physics.arcade.enable(baddie);
     baddie.animations.add('left', [0, 1], 10, true);
     baddie.animations.add('right', [2, 3], 10, true);
-    console.log(baddie);
+
 	 //  Finally some stars to collect
     stars = game.add.group();
 
