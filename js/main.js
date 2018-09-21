@@ -7,6 +7,7 @@ function preload() {
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
     game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
+    game.load.image('life', 'assets/firstaid.png', 32, 32);
     //WTF with image it appears
 }
 
@@ -16,6 +17,7 @@ var platforms;
 var cursors;
 
 var stars;
+var life;
 var score = 0;
 var scoreText;
 
@@ -102,6 +104,10 @@ function create() {
 
 	//  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+    //Lifes
+    life = game.add.sprite(150, 12, 'life');
+
 	//  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
 
@@ -165,6 +171,7 @@ function collectStar (player, star) {
 
 function baddieOverlap(player, baddie) {
   player.kill();
+
   score -= 10;
   scoreText.text = 'Score: ' + score;
 }
