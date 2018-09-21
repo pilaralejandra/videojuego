@@ -6,10 +6,12 @@ function preload() {
     game.load.image('ground', 'assets/platform.png');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-
+    game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
+    //WTF with image it appears
 }
 
 var player;
+var baddie;
 var platforms;
 var cursors;
 
@@ -71,6 +73,13 @@ function create() {
     player.animations.add('right', [5, 6, 7, 8], 10, true);
 
 
+    //The BADDIE and its settings
+    baddie = game.add.sprite(32, game.world.height - 150, 'baddie');
+    baddie.scale.set(1, 1);
+    game.physics.arcade.enable(baddie);
+    baddie.animations.add('left', [0, 1], 10, true);
+    baddie.animations.add('right', [2, 3], 10, true);
+    console.log(baddie);
 	 //  Finally some stars to collect
     stars = game.add.group();
 
