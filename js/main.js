@@ -74,11 +74,12 @@ function create() {
 
 
     //The BADDIE and its settings
-    baddie = game.add.sprite(80, game.world.height - 96, 'baddie');
-    baddie.scale.set(1, 1);
+    baddie = game.add.sprite((Math.random()*700)+80, game.world.height - 96, 'baddie');
     game.physics.arcade.enable(baddie);
     baddie.animations.add('left', [0, 1], 10, true);
     baddie.animations.add('right', [2, 3], 10, true);
+    baddie.body.collideWorldBounds = true;
+    baddie.body.immovable = true;//  This stops it from falling away when you jump on it
 
 	 //  Finally some stars to collect
     stars = game.add.group();
@@ -110,12 +111,15 @@ function update() {
 	//  Collide the player and the stars with the platforms
   var hitPlatform =  game.physics.arcade.collide(player, platforms);
 	game.physics.arcade.collide(stars, platforms);
+  //game.physics.arcade.collide(player, baddie);
 
 	//  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player, stars, collectStar, null, this);
+    game.physics.arcade.overlap(player, baddie, baddieOverlap, null, this);
 
 	//  Reset the players velocity (movement)
     player.body.velocity.x = 0;
+    baddie.body.velocity.x = 0;//This stop sliding
 
     if (cursors.left.isDown)
     {
@@ -144,6 +148,8 @@ function update() {
     {
         player.body.velocity.y = -350;
     }
+
+    baddie.body.velocity.x = 200;
 }
 
 function collectStar (player, star) {
@@ -155,4 +161,10 @@ function collectStar (player, star) {
     score += 10;
     scoreText.text = 'Score: ' + score;
 
+}
+
+function baddieOverlap(player, baddie) {
+  player.kill();
+  score -= 10;
+  scoreText.text = 'Score: ' + score;
 }
