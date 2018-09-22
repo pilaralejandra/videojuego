@@ -8,6 +8,7 @@ function preload() {
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
     game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
     game.load.image('life', 'assets/firstaid.png', 32, 32);
+    game.load.audio('bgmusic', 'assets/music/A_A_Aalto_-_Ultraviolet.mp3');
     //WTF with image it appears
 }
 
@@ -22,6 +23,7 @@ var lifeCount = 3;
 var score = 0;
 var scoreText;
 var lifeText;
+var music;
 
 function create() {
     //Add random stars
@@ -33,6 +35,8 @@ function create() {
     //  A simple background for our game
     game.add.sprite(0, 0, 'sky');
 
+    music = game.add.audio('bgmusic');
+    music.play();
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
 
