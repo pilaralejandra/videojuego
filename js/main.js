@@ -9,7 +9,8 @@ function preload() {
     game.load.spritesheet('baddie', 'assets/baddie.png', 32, 32);
     game.load.image('life', 'assets/firstaid.png', 32, 32);
     game.load.audio('bgmusic', 'assets/music/A_A_Aalto_-_Ultraviolet.mp3');
-    //WTF with image it appears
+    game.load.audio('die', 'assets/music/blaster.mp3');
+    game.load.audio('collect', 'assets/music/p-ping.mp3');
 }
 
 var player;
@@ -24,6 +25,8 @@ var score = 0;
 var scoreText;
 var lifeText;
 var music;
+var die;
+var collect;
 
 function create() {
     //Add random stars
@@ -36,6 +39,11 @@ function create() {
     game.add.sprite(0, 0, 'sky');
 
     music = game.add.audio('bgmusic');
+    die = game.add.audio('die');
+    collect = game.add.audio('collect');
+
+    //game.sound.setDecodedCallback([ die, collect ], start, this);
+
     music.play();
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
@@ -112,8 +120,8 @@ function create() {
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
     //Lifes
-    lifeImg = game.add.sprite(150, 12, 'life');
-    lifeText = game.add.text(200, 16, 'lifes: 3', {fontSize: '32px', fill: '#f83800'});
+    lifeImg = game.add.sprite(170, 12, 'life');
+    lifeText = game.add.text(220, 16, 'lifes: 3', {fontSize: '32px', fill: '#f83800'});
 
 	//  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -185,7 +193,9 @@ function collectStar (player, star) {
 	//  Add and update the score
     score += 10;
     scoreText.text = 'Score: ' + score;
+    collect.play();
     if (score == 120) {
+      music.pause();
       alert('You won the game, congratulations!');
       location.reload();
     }
@@ -199,10 +209,12 @@ function baddieOverlap(player, baddie) {
 
   player.reset(32, game.world.height - 150);
   baddie.reset((Math.random()*700)+80, game.world.height - 96);
-
+  flag = true;
   lifeCount -= 1;
   lifeText.text = 'Lives: ' + lifeCount;
+  die.play();
   if (lifeCount == 0) {
+    music.pause();
     alert('You lose :(');
     location.reload();
   }
