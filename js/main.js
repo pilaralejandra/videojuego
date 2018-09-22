@@ -15,11 +15,13 @@ var player;
 var baddie;
 var platforms;
 var cursors;
-
+var flag = true;
 var stars;
-var life;
+var lifeImg;
+var lifeCount = 3;
 var score = 0;
 var scoreText;
+var lifeText;
 
 function create() {
     //Add random stars
@@ -106,7 +108,8 @@ function create() {
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
     //Lifes
-    life = game.add.sprite(150, 12, 'life');
+    lifeImg = game.add.sprite(150, 12, 'life');
+    lifeText = game.add.text(200, 16, 'lifes: 3', {fontSize: '32px', fill: '#f83800'});
 
 	//  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -155,7 +158,19 @@ function update() {
         player.body.velocity.y = -350;
     }
 
-    baddie.body.velocity.x = 200;
+    if (flag) {
+      baddie.body.velocity.x = 200;
+      baddie.animations.play('right');
+      if (baddie.x == game.world.width -32) {
+        flag = false;
+      }
+    }else {
+      baddie.body.velocity.x = -200;
+      baddie.animations.play('left');
+      if (baddie.x == 0) {
+        flag = true;
+      }
+    }
 }
 
 function collectStar (player, star) {
@@ -166,12 +181,25 @@ function collectStar (player, star) {
 	//  Add and update the score
     score += 10;
     scoreText.text = 'Score: ' + score;
+    if (score == 120) {
+      alert('You won the game, congratulations!');
+      location.reload();
+    }
 
 }
 
 function baddieOverlap(player, baddie) {
-  player.kill();
 
-  score -= 10;
-  scoreText.text = 'Score: ' + score;
+  player.kill();
+  baddie.kill();
+
+  player.reset(32, game.world.height - 150);
+  baddie.reset((Math.random()*700)+80, game.world.height - 96);
+
+  lifeCount -= 1;
+  lifeText.text = 'Lives: ' + lifeCount;
+  if (lifeCount == 0) {
+    alert('You lose :(');
+    location.reload();
+  }
 }
